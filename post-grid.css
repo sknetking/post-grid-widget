@@ -1,0 +1,449 @@
+.post-grid-widget {
+    margin: 0 auto;
+    padding: 40px 20px;
+    max-width: 1200px;
+    box-sizing: border-box;
+}
+
+.post-grid-section-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Grid container */
+.post-grid-container {
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Post card */
+.post-grid-card {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.post-grid-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Featured image */
+.post-grid-image img {
+    width: 100%;
+    max-width:400px;    
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* Content section */
+.post-grid-content {
+    padding: 20px;
+}
+
+/* Title */
+.post-grid-title {
+    font-size: 20px;
+    margin: 0 0 10px;
+    line-height: 1.4;
+}
+
+.post-grid-title a {
+    text-decoration: none;
+    color: #222;
+}
+
+.post-grid-title a:hover {
+    color: #0073aa;
+}
+
+/* Meta */
+.post-grid-meta {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+/* Excerpt */
+.post-grid-excerpt {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+/* Read More */
+.post-grid-read-more a {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #0073aa;
+    transition: color 0.3s ease;
+}
+
+.post-grid-read-more a:hover {
+    color: #005177;
+}
+
+button.post-grid-load-more {
+    margin-top: 21px;
+}
+
+.post-grid-category a {
+    padding-right: 10px;
+}
+
+/* new test css added here */
+
+/* Modern Card Variation */
+.post-grid-container.modern-card .post-grid-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-grid-container.modern-card .post-grid-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-image {
+    overflow: hidden;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.post-grid-container.modern-card .post-grid-card:hover .post-grid-image img {
+    transform: scale(1.05);
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-category {
+    margin-bottom: 10px;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-category a {
+    display: inline-block;
+    background: #4e6bff;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-title {
+    margin: 0 0 15px 0;
+    font-size: 1.25rem;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-title a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* .post-grid-container.modern-card .post-grid-card:hover .post-grid-title a {
+    color: #4e6bff;
+}
+ */
+.post-grid-container.modern-card .post-grid-card .post-grid-meta {
+    color: #777;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-author a,
+.post-grid-container.modern-card .post-grid-card .post-grid-date {
+    color: #777;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-excerpt {
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-read-more a {
+    display: inline-block;
+    padding: 8px 20px;
+    background: transparent;
+    color: #4e6bff;
+    border: 1px solid #4e6bff;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.post-grid-container.modern-card .post-grid-card .post-grid-read-more a:hover {
+    background: #4e6bff;
+    color: white;
+}
+
+/* new layout 2 design css added here  */
+
+
+/* Minimalist Card Variation */
+.post-grid-container.minimalist-card .post-grid-card {
+    background: #fff;
+    border: 1px solid #eee;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-category {
+    margin-bottom: 12px;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-category a {
+    color: #888;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-title {
+    margin: 0 0 12px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-title a {
+    color: #222;
+    text-decoration: none;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-meta {
+    color: #aaa;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+    order: 3;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-excerpt {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-read-more {
+    margin-top: auto;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-read-more a {
+    color: #222;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border-bottom: 1px solid #222;
+    padding-bottom: 2px;
+    transition: border-color 0.3s ease;
+}
+
+.post-grid-container.minimalist-card .post-grid-card .post-grid-read-more a:hover {
+    border-bottom-color: transparent;
+}
+
+/* new style layout 3 added here  */
+
+/* Dark Card Variation */
+.post-grid-container.dark-card .post-grid-card {
+    background: #2a2a2a;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.post-grid-container.dark-card .post-grid-card:hover {
+    transform: scale(1.02);
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-image::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: -40px;
+    z-index: 2;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-category {
+    margin-bottom: 15px;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-category a {
+    display: inline-block;
+    background: #ff5e5e;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-title {
+    margin: 0 0 15px 0;
+    font-size: 1.3rem;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-title a {
+    color: white;
+    text-decoration: none;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-meta {
+    color: #bbb;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-author a,
+.post-grid-container.dark-card .post-grid-card .post-grid-date {
+    color: #bbb;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-excerpt {
+    color: #ddd;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-read-more a {
+    display: inline-block;
+    padding: 8px 20px;
+    background: #ff5e5e;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.post-grid-container.dark-card .post-grid-card .post-grid-read-more a:hover {
+    background: #ff3a3a;
+}
+
+/* css for list view  */
+.post-grid-container.list-view .post-grid-card {
+    display: flex;
+}
+
+.post-grid-container.list-view .post-grid-image{
+    width:100%;
+    padding:0px;
+    margin:0px;
+   }
+.post-grid-container.list-view .post-grid-content{
+width:100%;
+}
+
+.post-filters {
+    margin-bottom:20px;
+}
+.filter-button {
+    background: azure;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.filter-button.active {
+    color: #3a3a3a;
+    font-weight: bold;
+}
+
+.post-filters .filter-button.active {
+    color: #ffffff;
+    background: green;
+}
+.post-filters .filter-button {
+    color: #ffffff;
+    background: #00a8f8;
+}
+
+.filter-button.active:after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 68%;
+    height: 3px;
+    background-color: #ffffff;
+}
