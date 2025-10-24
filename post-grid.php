@@ -205,32 +205,13 @@ class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
 			]
 		);
          
-        function sk_wpq_get_post_type_options() {
-            $post_types = get_post_types([
-                'public' => true,
-                // You can add more args here to filter post types
-            ], 'objects');
-
-            $options = [];
-
-            foreach ($post_types as $post_type) {
-                // Skip some post types if needed
-                if (in_array($post_type->name, ['attachment', 'elementor_library'])) {
-                    continue;
-                }
-                
-                $options[$post_type->name] = $post_type->label;
-            }
-
-            return $options;
-        }
-
+        
         $this->add_control(
             'selected_post_type',
             [
                 'label' => esc_html__('Select Post Type', 'elementor-addon'),
                 'type' => \Elementor\Controls_Manager::SELECT2,
-                'options' =>sk_wpq_get_post_type_options(),
+                'options' =>get_post_types(array('public' => true), 'names', 'and'),
                 'default' => 'post',
                 'label_block' => true,
                 'description' => esc_html__('Choose which post type to display', 'elementor-addon'),
@@ -1586,3 +1567,4 @@ $query = new \WP_Query( $args );
         }
        
 }
+
