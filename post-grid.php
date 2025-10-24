@@ -1,6 +1,4 @@
 <?php
-include_once 'wp-query-builder.php';
-
 class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
     
 
@@ -197,8 +195,176 @@ class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
         );
 
         $this->end_controls_section();
-        //This Added the query controls
-        Custom_WP_Query_Builder::register_controls($this);
+   
+        // Query Filters Section
+        $this->start_controls_section(
+			'section_query_builder',
+			[
+				'label' => esc_html__( 'Query Builder', 'elementor-addon' ),
+				'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+			]
+		);
+         
+        function sk_wpq_get_post_type_options() {
+            $post_types = get_post_types([
+                'public' => true,
+                // You can add more args here to filter post types
+            ], 'objects');
+
+            $options = [];
+
+            foreach ($post_types as $post_type) {
+                // Skip some post types if needed
+                if (in_array($post_type->name, ['attachment', 'elementor_library'])) {
+                    continue;
+                }
+                
+                $options[$post_type->name] = $post_type->label;
+            }
+
+            return $options;
+        }
+
+        $this->add_control(
+            'selected_post_type',
+            [
+                'label' => esc_html__('Select Post Type', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::SELECT2,
+                'options' =>sk_wpq_get_post_type_options(),
+                'default' => 'post',
+                'label_block' => true,
+                'description' => esc_html__('Choose which post type to display', 'elementor-addon'),
+            ]
+        );
+
+         $this->add_control(
+            'posts_per_page',
+            [
+                'label' => esc_html__('Number of Posts', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::NUMBER,
+                'default' => 6,
+                'min' =>1,
+                'max' =>30,
+            ]
+        );
+        // Order by control
+        $this->add_control(
+            'orderby',
+            [
+                'label' => __('Order By', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'date',
+                'options' => [
+                    'date' => __('Date', 'elementor-addon'),
+                    'title' => __('Title', 'elementor-addon'),
+                    'menu_order' => __('Menu Order', 'elementor-addon'),
+                    'rand' => __('Random', 'elementor-addon'),
+                    'comment_count' => __('Comment Count', 'elementor-addon'),
+                    'modified' => __('Modified', 'elementor-addon'),
+                    'meta_value' => __('Custom Field', 'elementor-addon'),
+                ],
+            ]
+        );
+
+        // Order direction
+        $this->add_control(
+            'order',
+            [
+                'label' => __('Order', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'DESC',
+                'options' => [
+                    'ASC' => __('ASC', 'elementor-addon'),
+                    'DESC' => __('DESC', 'elementor-addon'),
+                ],
+            ]
+        );
+
+        // Meta key (if orderby is meta_value)
+        $this->add_control(
+            'meta_key',
+            [
+                'label' => __('Meta Key', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'condition' => [
+                    'orderby' => 'meta_value',
+                ],
+            ]
+        );
+
+        // Post IDs filter
+        $this->add_control(
+            'post__in',
+            [
+                'label' => __('Include Only', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'description' => __('Comma-separated list of post IDs', 'elementor-addon'),
+            ]
+        );
+
+        // Exclude posts
+        $this->add_control(
+            'post__not_in',
+            [
+                'label' => __('Exclude', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'description' => __('Comma-separated list of post IDs to exclude', 'elementor-addon'),
+            ]
+        );
+
+        // Author filter
+        $this->add_control(
+            'author__in',
+            [
+                'label' => __('Authors', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'description' => __('Comma-separated author IDs', 'elementor-addon'),
+            ]
+        );
+
+        // Category filter
+        $this->add_control(
+            'category__in',
+            [
+                'label' => __('Categories', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'description' => __('Comma-separated category IDs', 'elementor-addon'),
+            ]
+        );
+
+        // Tag filter
+        $this->add_control(
+            'tag__in',
+            [
+                'label' => __('Tags', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'description' => __('Comma-separated tag IDs', 'elementor-addon'),
+            ]
+        );
+
+        // Date query
+        $this->add_control(
+            'date_query',
+            [
+                'label' => __('Date', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => '',
+                'options' => [
+                    '' => __('All', 'elementor-addon'),
+                    'today' => __('Today', 'elementor-addon'),
+                    'yesterday' => __('Yesterday', 'elementor-addon'),
+                    'this_week' => __('This Week', 'elementor-addon'),
+                    'last_week' => __('Last Week', 'elementor-addon'),
+                    'this_month' => __('This Month', 'elementor-addon'),
+                    'last_month' => __('Last Month', 'elementor-addon'),
+                    'this_year' => __('This Year', 'elementor-addon'),
+                    'last_year' => __('Last Year', 'elementor-addon'),
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+    
         
         // Style Tab
         $this->start_controls_section(
@@ -1254,12 +1420,100 @@ class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
         $settings = $this->get_settings_for_display();
         $widget_id = $this->get_id();
          
-        $args = Custom_WP_Query_Builder::build_query_args($settings);
-      
-        // Initial query args
-      
-        $query = new \WP_Query($args);
+$args = [
+    'post_type'      => $settings['selected_post_type'],
+    'posts_per_page' => $settings['posts_per_page'],
+    'orderby'        => $settings['orderby'],
+    'order'          => $settings['order'],
+];
 
+// If orderby is meta_value, include meta_key
+if ( 'meta_value' === $settings['orderby'] && ! empty( $settings['meta_key'] ) ) {
+    $args['meta_key'] = $settings['meta_key'];
+}
+
+// Include posts
+if ( ! empty( $settings['post__in'] ) ) {
+    $args['post__in'] = array_map( 'intval', explode( ',', $settings['post__in'] ) );
+}
+
+// Exclude posts
+if ( ! empty( $settings['post__not_in'] ) ) {
+    $args['post__not_in'] = array_map( 'intval', explode( ',', $settings['post__not_in'] ) );
+}
+
+// Author filter
+if ( ! empty( $settings['author__in'] ) ) {
+    $args['author__in'] = array_map( 'intval', explode( ',', $settings['author__in'] ) );
+}
+
+// Category filter
+if ( ! empty( $settings['category__in'] ) ) {
+    $args['category__in'] = array_map( 'intval', explode( ',', $settings['category__in'] ) );
+}
+
+// Tag filter
+if ( ! empty( $settings['tag__in'] ) ) {
+    $args['tag__in'] = array_map( 'intval', explode( ',', $settings['tag__in'] ) );
+}
+
+// Date query handling
+$date_query = [];
+switch ( $settings['date_query'] ) {
+    case 'today':
+        $date_query[] = [
+            'after' => 'today',
+        ];
+        break;
+    case 'yesterday':
+        $date_query[] = [
+            'after'     => 'yesterday',
+            'before'    => 'today',
+            'inclusive' => true,
+        ];
+        break;
+    case 'this_week':
+        $date_query[] = [
+            'after' => 'monday this week',
+        ];
+        break;
+    case 'last_week':
+        $date_query[] = [
+            'after'     => 'monday last week',
+            'before'    => 'sunday last week',
+            'inclusive' => true,
+        ];
+        break;
+    case 'this_month':
+        $date_query[] = [
+            'year'  => date('Y'),
+            'month' => date('n'),
+        ];
+        break;
+    case 'last_month':
+        $date_query[] = [
+            'year'  => date('Y', strtotime('-1 month')),
+            'month' => date('n', strtotime('-1 month')),
+        ];
+        break;
+    case 'this_year':
+        $date_query[] = [
+            'year' => date('Y'),
+        ];
+        break;
+    case 'last_year':
+        $date_query[] = [
+            'year' => date('Y') - 1,
+        ];
+        break;
+}
+
+if ( ! empty( $date_query ) ) {
+    $args['date_query'] = $date_query;
+}
+
+// ✅ Final WP_Query
+$query = new \WP_Query( $args );
          // Filter out empty values (including empty arrays, empty strings, null, false)
         $filtered_settings = array_filter($settings, function($value) {
             // Customize this condition based on what you consider "empty"
@@ -1330,5 +1584,5 @@ class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
             
             return $options;
         }
-
+       
 }
