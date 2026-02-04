@@ -2,27 +2,27 @@
 class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
     
 
-    public function get_name():string {
+    public function get_name() {
         return 'recent_post_grid';
     }
 
-    public function get_title(): string {
+    public function get_title() {
         return esc_html__('Post Grid', 'elementor-addon');
     }
 
-    public function get_icon(): string {
+    public function get_icon() {
         return 'eicon-posts-grid';
     }
 
-    public function get_categories(): array {
+    public function get_categories() {
         return ['basic'];
     }
 
-    public function get_keywords(): array {
+    public function get_keywords() {
         return ['post', 'grid', 'recent', 'blog'];
     }
     
-    protected function register_controls(): void {
+    protected function register_controls() {
         // Content Tab
   
 
@@ -429,7 +429,23 @@ class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
                 'label_on' => esc_html__('Show', 'elementor-addon'),
                 'label_off' => esc_html__('Hide', 'elementor-addon'),
                 'return_value' => 'yes',
-                'default' => 'no',
+                'default' => 'yes',
+            ]
+        );
+
+        $this->add_control(
+            'pagination_type',
+            [
+                'label' => esc_html__('Pagination Type', 'elementor-addon'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'load_more',
+                'options' => [
+                    'load_more' => esc_html__('Load More Button', 'elementor-addon'),
+                    'numbered' => esc_html__('Numbered Pagination', 'elementor-addon'),
+                ],
+                'condition' => [
+                    'show_load_more' => 'yes',
+                ],
             ]
         );
 
@@ -934,7 +950,7 @@ class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
             \Elementor\Group_Control_Typography::get_type(),
             [
                 'name' => 'title_typography',
-                'selector' => '{{WRAPPER}} .post-grid-title',
+                'selector' => '{{WRAPPER}} .post-grid-title a',
             ]
         );
 
@@ -1397,19 +1413,19 @@ class Elementor_Recent_Post_Grid extends \Elementor\Widget_Base {
     }
     
 
-    protected function render(): void {
+    protected function render() {
         $settings = $this->get_settings_for_display();
         $widget_id = $this->get_id();
          
 $args = [
-    'post_type'      => $settings['selected_post_type'],
-    'posts_per_page' => $settings['posts_per_page'],
-    'orderby'        => $settings['orderby'],
-    'order'          => $settings['order'],
+    'post_type'      => isset($settings['selected_post_type']) ? $settings['selected_post_type'] : 'post',
+    'posts_per_page' => isset($settings['posts_per_page']) ? $settings['posts_per_page'] : 6,
+    'orderby'        => isset($settings['orderby']) ? $settings['orderby'] : 'date',
+    'order'          => isset($settings['order']) ? $settings['order'] : 'DESC',
 ];
 
 // If orderby is meta_value, include meta_key
-if ( 'meta_value' === $settings['orderby'] && ! empty( $settings['meta_key'] ) ) {
+if (isset($settings['orderby']) && 'meta_value' === $settings['orderby'] && ! empty( $settings['meta_key'] ) ) {
     $args['meta_key'] = $settings['meta_key'];
 }
 
@@ -1440,53 +1456,55 @@ if ( ! empty( $settings['tag__in'] ) ) {
 
 // Date query handling
 $date_query = [];
-switch ( $settings['date_query'] ) {
-    case 'today':
-        $date_query[] = [
-            'after' => 'today',
-        ];
-        break;
-    case 'yesterday':
-        $date_query[] = [
-            'after'     => 'yesterday',
-            'before'    => 'today',
-            'inclusive' => true,
-        ];
-        break;
-    case 'this_week':
-        $date_query[] = [
-            'after' => 'monday this week',
-        ];
-        break;
-    case 'last_week':
-        $date_query[] = [
-            'after'     => 'monday last week',
-            'before'    => 'sunday last week',
-            'inclusive' => true,
-        ];
-        break;
-    case 'this_month':
-        $date_query[] = [
-            'year'  => date('Y'),
-            'month' => date('n'),
-        ];
-        break;
-    case 'last_month':
-        $date_query[] = [
-            'year'  => date('Y', strtotime('-1 month')),
-            'month' => date('n', strtotime('-1 month')),
-        ];
-        break;
-    case 'this_year':
-        $date_query[] = [
-            'year' => date('Y'),
-        ];
-        break;
-    case 'last_year':
-        $date_query[] = [
-            'year' => date('Y') - 1,
-        ];
-        break;
+if (isset($settings['date_query'])) {
+    switch ( $settings['date_query'] ) {
+        case 'today':
+            $date_query[] = [
+                'after' => 'today',
+            ];
+            break;
+        case 'yesterday':
+            $date_query[] = [
+                'after'     => 'yesterday',
+                'before'    => 'today',
+                'inclusive' => true,
+            ];
+            break;
+        case 'this_week':
+            $date_query[] = [
+                'after' => 'monday this week',
+            ];
+            break;
+        case 'last_week':
+            $date_query[] = [
+                'after'     => 'monday last week',
+                'before'    => 'sunday last week',
+                'inclusive' => true,
+            ];
+            break;
+        case 'this_month':
+            $date_query[] = [
+                'year'  => date('Y'),
+                'month' => date('n'),
+            ];
+            break;
+        case 'last_month':
+            $date_query[] = [
+                'year'  => date('Y', strtotime('-1 month')),
+                'month' => date('n', strtotime('-1 month')),
+            ];
+            break;
+        case 'this_year':
+            $date_query[] = [
+                'year' => date('Y'),
+            ];
+            break;
+        case 'last_year':
+            $date_query[] = [
+                'year' => date('Y') - 1,
+            ];
+            break;
+    }
 }
 
 if ( ! empty( $date_query ) ) {
@@ -1502,7 +1520,7 @@ $query = new \WP_Query( $args );
         });
          
          $terms = get_terms([
-            'taxonomy' => $settings['select_taxonomy'],
+            'taxonomy' => isset($settings['select_taxonomy']) ? $settings['select_taxonomy'] : 'category',
             'hide_empty' => true,
         ]);
 
@@ -1511,40 +1529,71 @@ $query = new \WP_Query( $args );
 
         if ($query->have_posts()) :
             ?>
-            <div class="post-grid-widget">
-                <?php if($settings['select_taxonomy']): ?>
-                <div class="post-filters">
-                    <button class="filter-button active" data-filter=""> <?php echo __('All', 'text-domain'); ?></button>
-                    <?php foreach ($terms as $term) : ?>
-                    <button class="filter-button" data-filter="<?php echo esc_attr($term->term_id); ?>">
-                        <?php echo esc_html($term->name); ?>
-                    </button>
-                    <?php endforeach; ?>
-                </div>
-                <?php endif; ?> 
-                
-                <div class="post-grid-container <?= $settings['card_style']; ?>" style="display: grid;">
-                    <?php while ($query->have_posts()) : $query->the_post();
+<div class="post-grid-widget">
+    <?php if(isset($settings['select_taxonomy']) && $settings['select_taxonomy']): ?>
+    <div class="post-filters">
+        <button class="filter-button active" data-filter=""> <?php echo __('All', 'text-domain'); ?></button>
+        <?php foreach ($terms as $term) : ?>
+        <button class="filter-button" data-filter="<?php echo esc_attr($term->term_id); ?>">
+            <?php echo esc_html($term->name); ?>
+        </button>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+
+    <div class="post-grid-container <?= isset($settings['card_style']) ? $settings['card_style'] : ''; ?>"
+        style="display: grid;">
+        <?php while ($query->have_posts()) : $query->the_post();
                       
                       include plugin_dir_path(__FILE__) . '/templates/post-grid-item.php';
                     
                     endwhile; ?>
-                </div>
-                <?php if ('yes' === $settings['show_load_more'] && $query->max_num_pages > 1) : ?>
-                    <div class="post-grid-load-more-container">
-                        <button class="post-grid-load-more" 
-                                data-page="2" 
-                                data-max-pages="<?php echo esc_attr($query->max_num_pages); ?>"
-                                data-widget-id="<?php echo esc_attr($widget_id); ?>"
-                                data-page_content="<?php echo esc_attr($page_content); ?>">
-                               
-                            <?php echo esc_html($settings['load_more_text']); ?>
-                        </button>
-                    </div>
-                <?php endif; ?>
-                               
-                </div>
-            <?php
+    </div>
+    <?php if ($query->max_num_pages > 1) : ?>
+    <?php if (isset($settings['show_load_more']) && 'yes' === $settings['show_load_more']) : ?>
+    <div class="post-grid-load-more-container">
+        <button class="post-grid-load-more" data-page="2"
+            data-max-pages="<?php echo esc_attr($query->max_num_pages); ?>"
+            data-widget-id="<?php echo esc_attr($widget_id); ?>"
+            data-page_content="<?php echo esc_attr($page_content); ?>">
+            <?php echo esc_html(isset($settings['load_more_text']) ? $settings['load_more_text'] : 'Load More'); ?>
+        </button>
+    </div>
+    <?php endif; ?>
+
+    <?php if ('numbered' === (isset($settings['pagination_type']) ? $settings['pagination_type'] : 'load_more')) : ?>
+    <div class="post-grid-pagination">
+        <?php
+                $current_page = max(1, get_query_var('paged'));
+                $total_pages = $query->max_num_pages;
+                
+                if ($current_page > 1) : ?>
+        <a href="#" class="pagination-link" data-page="<?php echo $current_page - 1; ?>"
+            data-widget-id="<?php echo esc_attr($widget_id); ?>"
+            data-page_content="<?php echo esc_attr($page_content); ?>">«</a>
+        <?php endif;
+                
+                for ($i = 1; $i <= $total_pages; $i++) :
+                    if ($i == $current_page) : ?>
+        <span class="current"><?php echo $i; ?></span>
+        <?php else : ?>
+        <a href="#" class="pagination-link" data-page="<?php echo $i; ?>"
+            data-widget-id="<?php echo esc_attr($widget_id); ?>"
+            data-page_content="<?php echo esc_attr($page_content); ?>"><?php echo $i; ?></a>
+        <?php endif;
+                endfor;
+                
+                if ($current_page < $total_pages) : ?>
+        <a href="#" class="pagination-link" data-page="<?php echo $current_page + 1; ?>"
+            data-widget-id="<?php echo esc_attr($widget_id); ?>"
+            data-page_content="<?php echo esc_attr($page_content); ?>">»</a>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+    <?php endif; ?>
+
+</div>
+<?php
             
             wp_reset_postdata();
         else :
@@ -1567,4 +1616,3 @@ $query = new \WP_Query( $args );
         }
        
 }
-
