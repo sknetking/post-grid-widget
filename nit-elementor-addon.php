@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:      NIT Elementor Addon
- * Description:      NIT Elementor Addon provide many premium widget free like post grid and related post. 
+ * Plugin Name:      SK Elementor Addon
+ * Description:      SK Elementor Addon provide many premium widget free like post grid and related post. 
  * Version:           1.0.0
  * Author:            Shyam Sahani
  * Author URI:        https://developers.elementor.com/
